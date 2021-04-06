@@ -36,3 +36,50 @@
     transform: rotate(360deg);
   }
 }
+
+.sort-icon {
+  font-weight: bold;
+  color:rgb(2, 99, 243);
+}
+
+.mr-5 {
+  margin-right: 5px;  
+}
+.mr-0 {
+  margin-left:0;
+}
+
+td {
+  text-align: center;
+
+}
+.w-0 {
+  width: 0px;
+}
+.close {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  background-color: darkred;
+  border-radius:50%;
+  color: white;
+}
+
+.btn-ed {
+  padding:2px;
+  
+}
+
+.sort-selected:after {
+  content:'\2714';
+  font-size: 20px;
+  display:inline-block;
+  vertical-align: top;
+  line-height: 1.25em;
+  width: 1.25em;
+  height:1.25em;
+  margin-right: 0.3em;
+  text-align: right;
+  color: green;
+  margin-left: 20px;
+}
