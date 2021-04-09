@@ -1,13 +1,15 @@
 import React, { Component} from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../actions/index';
 
 class Form extends Component {
-
 
   constructor(props) {
 
     super(props);
     
     this.state={
+      id:'',
       name:"",
       status: "active"
     
@@ -16,12 +18,13 @@ class Form extends Component {
   }
   
   componentDidMount() {
-    var {taskEdit} = this.props;
-    if (taskEdit) {
-      console.log("edit");
+    
+    var {taskEditing} = this.props;
+    if (taskEditing) {
       this.setState({ 
-        name: taskEdit.name,
-        status: taskEdit.status
+        id: taskEditing.id,
+        name: taskEditing.name,
+        status: taskEditing.status
       });
     }
   }
@@ -30,22 +33,37 @@ class Form extends Component {
     if (!nextProps) {
       return;
     }
-
-    var taskEdit = nextProps.taskEdit;
+    var taskEdit = nextProps.taskEditing;
     if (taskEdit) {
-      console.log("edit", taskEdit);
+      // console.log("edit", taskEdit);
       this.setState({ 
+        id: taskEdit.id,
         name: taskEdit.name,
         status: taskEdit.status
       });
     }  else {
-      this.setState({ 
+      this.setState({
+        id: '', 
         name: '',
         status: 'active'
       });
     }
   }
 
+
+  // componentDidUpdate(prevProps, prevState) {
+  //   console.log(this.props.taskEditing);
+  //   if(prevProps.taskEditing !==this.props.taskEditing && this.props.taskEditing){
+  //      this.setState ({
+  //       id: this.props.taskEditing.id,
+  //       name: this.props.taskEditing.name,
+  //       status: this.props.taskEditing.status
+  //     });
+  //   } else {
+     
+  //   }
+
+  //  }
   onChange = (e) => {
     var target = e.target;
     var name = target.name;
@@ -61,23 +79,32 @@ class Form extends Component {
     if(this.state.name ==='') {
       return;
     }
-    this.props.onSubmit(this.state);
+    this.props.onSaveTask(this.state);
     this.resetForm();
+    this.props.onSetNullEditingTask();
   }
   resetForm = () => {
     this.setState({
       name:'', 
       status:'active'
     });
+    
+  }
+
+  onCloseForm = () => {
+    this.props.onCloseForm();
+    this.props.onSetNullEditingTask();
   }
 
   render() {
+    if (!this.props.isDisplayForm) return '';
     
     return (
+      
     <div className="card">
-      <div className="card-header bg-info">{ this.props.taskEdit ? "Update task": "Create new task"}
+      <div className="card-header bg-info">{ this.state.id ? "Update task": "Create new task"}
       <button type="button" className="close" aria-label="Close"
-        onClick={ this.props.onHiden }
+        onClick={ this.onCloseForm }
       >
           <span aria-hidden="true" style={{ color: "white"}}>&times;</span>
       </button>
@@ -121,4 +148,25 @@ class Form extends Component {
   }
 }
 
-export default Form;
+const mapStateToProps = (state) => {
+  return {
+    isDisplayForm: state.isDisplayForm,
+    taskEditing: state.taskEditing
+
+  }
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onSaveTask: (task) => {
+      dispatch(actions.saveTask(task));
+    },
+    onCloseForm: ()=> {
+      dispatch(actions.closeForm());
+    },
+    onSetNullEditingTask: () => {
+      dispatch(actions.setNullTaskEditing());
+    }
+  }
+} 
+export default connect(mapStateToProps, mapDispatchToProps)(Form);

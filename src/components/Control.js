@@ -8,9 +8,9 @@ class Control extends Component {
     return (
       <div className="row" style={{ padding: "10px 0"}}>
         {/*Serch*/}
-        <Search onSearch ={ this.props.onSearch }/>
+        <Search/>
         {/*Sort*/}
-        <Sort sortBy = { this.props.sortBy }/>
+        <Sort />
       </div>
     );
   }

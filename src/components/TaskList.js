@@ -1,11 +1,14 @@
 import React, { Component} from  'react';
 import TaskItem from './TaskItem';
+import { filter } from 'lodash';
+import { connect } from 'react-redux';
+// import * as actions from '../actions/index';
 
 class TaskList extends Component {
 
   constructor(props) {
     super(props);
-
+    
     this.state = {
       filterName : '',
       filterStatus  : "all"
@@ -24,26 +27,40 @@ class TaskList extends Component {
   }
 
   render() {
-    var {tasks} = this.props;
-    
+    var {tasks, keyword, sort} = this.props;
+    var {filterStatus, filterName} = this.state;
+    // filter handle.
+    if (filterStatus !== 'all') {
+      tasks = filter(tasks, (a) => {
+        return filterStatus === a.status;
+      });
+    }
+    if (filterName.trim() !== '') {
+      tasks = filter(tasks, (a) => {
+        return a.name.toLowerCase().indexOf(filterName.toLowerCase().trim()) !== -1
+      });
+    }
    
+    // search handle
+    if (keyword !== '') {
+      tasks = filter(tasks, (task) => {
+        return task.name.toLowerCase().indexOf(keyword) !== -1;
+      });
+    }
+    // sort handle
+    if (sort.by) {
+
+      tasks.sort((a, b) => {
+        if(a[sort.by].toLowerCase() === b[sort.by].toLowerCase()) return 0;
+        return (a[sort.by].toLowerCase() > b[sort.by].toLowerCase()) ? sort.value : -sort.value;
+      });
+    }
+
+
     var elems = tasks.map((task, index) => {
-      var rs = '';
-      var {filterStatus, filterName} = this.state;
-
-      if (filterStatus === "all" || filterStatus === task.status) {
-        if (filterName === '' || task.name.toLowerCase().indexOf(filterName.toLowerCase().trim()) !== -1 ) {
-          return <TaskItem key={task.id} 
+          return <TaskItem key={index} 
             task={task} index={index}
-            onDelete = { this.props.onDelete }
-            onUpdate = { this.props.onUpdate }
-            onUpdateStatus={ this.props.onUpdateStatus }/>
-        }
-        
-      } 
-      
-      return rs;
-
+          />
     });
 
     return (
@@ -58,11 +75,12 @@ class TaskList extends Component {
         </thead>
         <tbody>
           <tr className="d-flex">
-            <td className="col-1"scope="row"></td>
+            <td className="col-1"></td>
             <td className="col-7">
                 <input
                   type="text" className="form-control"
                   name="filterName"
+                  placeholder="Filter by name"
                   onChange = { this.onChange }
                 />
             </td>
@@ -70,6 +88,7 @@ class TaskList extends Component {
               <select className="form-control"
                 name="filterStatus"
                 onChange = { this.onChange }
+                value={ this.state.filterStatus }
               >
                 <option value="all">All</option>
                 <option value ="active">Active</option>
@@ -86,4 +105,18 @@ class TaskList extends Component {
   }
 }
 
-export default TaskList;
+const mapStateToProps = (state) => {
+  return {
+    tasks: state.tasks,
+    keyword: state.search,
+    sort: state.sort,
+  };
+}
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    // onFilterTaskList: (filter) => {
+    //   return dispatch(actions.filterTaskList(filter));
+    // }
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(TaskList);

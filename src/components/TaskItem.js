@@ -1,17 +1,19 @@
 import React, { Component} from  'react';
+import { connect} from 'react-redux';
+import * as actions from '../actions/index';
+
 
 class TaskItem extends Component {
 
   onUpdateStatus = () => {
-    this.props.onUpdateStatus(this.props.task.id);
+    this.props.onUpdateStatus(this.props.task.id)
   }
 
   statusHandle =(status) => {
-    let trust = {
+    const trust = {
       active:{title:"Active", class:"badge badge-info"}, 
       hiden:{title:"Hiden", class:"badge badge-danger"},
       complete:{title:"Completed", class:"badge badge-success"},
-     
     }
     let info = trust[status];
     
@@ -21,11 +23,15 @@ class TaskItem extends Component {
       className={info.class}>{ info.title }</span>
     
   }
-  onDelete = () => {
-    this.props.onDelete(this.props.task.id);
+
+  onDeleteTask = () => {
+    this.props.onDeleteTask(this.props.task.id);
+    this.props.onCloseForm();
   }
-  onUpdate = () => {
-    this.props.onUpdate(this.props.task.id);
+  
+  onUpdateTask = () => {
+    this.props.onOpenForm();
+    this.props.onUpdateTask(this.props.task);
   }
 
   render() {
@@ -34,22 +40,22 @@ class TaskItem extends Component {
     return (
 
       <tr className="d-flex">
-          <td className="col-1" scope="row">{index + 1}</td>
+          <td className="col-1" >{index + 1}</td>
           <td className="col-7">{ task.name }</td>
           <td className="col-2">
             {this.statusHandle(task.status)}
           </td>
-          <td className="col-2">
+          <td className="col-2" style = {{padding:"5px"}}>
             <button className="btn-ed btn btn-warning "
               style={{marginRight:"5px"}}
-              onClick={ this.onUpdate }
+              onClick={ this.onUpdateTask }
             >
             <i className="far fa-edit"></i> Edit
             </button>
             <button 
-              onClick={ this.onDelete }
+              onClick={ this.onDeleteTask }
               className="btn-ed btn btn-danger">
-              <i className="far fa-trash-alt"></i> DeLete
+              <i className="far fa-trash-alt"></i> Delete
             </button>
           </td>
       </tr>
@@ -57,4 +63,30 @@ class TaskItem extends Component {
   }
 }
 
-export default TaskItem;
+const mapStateToProps = (state) => {
+  return {
+    
+  };
+}
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    onUpdateStatus : (id) => {
+      return dispatch(actions.updateStatus(id));
+    },
+    onDeleteTask: (id) => {
+      return dispatch(actions.deleteTask(id));
+    },
+    onCloseForm: ()=> {
+      return dispatch(actions.closeForm());
+    },
+    onOpenForm: () => {
+      return dispatch(actions.openForm());
+    },
+    onUpdateTask: (task) => {
+      return dispatch(actions.updateTask(task));
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps) (TaskItem);

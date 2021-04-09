@@ -1,4 +1,5 @@
 {
+  "homepage": "https://vuongvanchinh.github.io/to-do-app",
   "name": "todo",
   "version": "0.1.0",
   "private": true,
@@ -9,10 +10,14 @@
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-redux": "^7.2.3",
     "react-scripts": "4.0.3",
+    "redux": "^4.0.5",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

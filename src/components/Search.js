@@ -1,4 +1,6 @@
 import React, { Component} from 'react';
+import { connect} from 'react-redux';
+import * as actions from '../actions/index';
 
 class Search extends Component {
   constructor(props) {
@@ -9,9 +11,7 @@ class Search extends Component {
   }
 
   onSearch = () => {
-    if (this.state.keyword.trim() !== '') {
-      this.props.onSearch(this.state.keyword.trim().toLowerCase());
-    }
+    this.props.onSearch(this.state.keyword.trim().toLowerCase());
   }
 
   onChange = (e) => {
@@ -44,4 +44,12 @@ class Search extends Component {
   }
 }
 
-export default Search;
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    onSearch : (keyword) => {
+      return dispatch(actions.searchTask(keyword));
+    } 
+  };
+}
+
+export default connect(null, mapDispatchToProps)(Search);
