@@ -62,21 +62,23 @@ class TaskList extends Component {
             task={task} index={index}
           />
     });
-
+    const style = {
+      textAlign: "center"
+    };
     return (
       <table className="table table-bordered table-hover">
         <thead>
           <tr className="d-flex">
-            <th className="col-1">Index</th>
-            <th className="col-7">Name</th>
-            <th className="col-2">Status</th>
-            <th className="col-2 col-sm-4">Action</th>
+            <th className="col-sm-2 col-md-1" style={style}> Index</th>
+            <th className="col-sm-6 col-md-7" style={style}>Name</th>
+            <th className="col-sm-2 col-md-2" style={style}>Status</th>
+            <th className="col-sm-2 col-md-2" style={style}>Action</th>
           </tr>
         </thead>
         <tbody>
           <tr className="d-flex">
-            <td className="col-1"></td>
-            <td className="col-7">
+            <td className="col-sm-2 col-md-1"></td>
+            <td className="col-sm-6 col-md-7">
                 <input
                   type="text" className="form-control"
                   name="filterName"
@@ -84,7 +86,7 @@ class TaskList extends Component {
                   onChange = { this.onChange }
                 />
             </td>
-            <td className="col-2">
+            <td className="col-sm-2 col-md-2">
               <select className="form-control"
                 name="filterStatus"
                 onChange = { this.onChange }
@@ -96,7 +98,7 @@ class TaskList extends Component {
                 <option value="complete">Completed</option>
               </select>
             </td>
-            <td className="col-2"></td>
+            <td className="col-sm-2 col-md-2"></td>
           </tr>
           {elems}
         </tbody>

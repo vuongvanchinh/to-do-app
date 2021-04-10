@@ -83,3 +83,6 @@ td {
   color: green;
   margin-left: 20px;
 }
+th {
+  padding: 2px;
+}

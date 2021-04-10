@@ -5,20 +5,16 @@ import * as actions from '../actions/index';
 class Form extends Component {
 
   constructor(props) {
-
     super(props);
-    
     this.state={
       id:'',
       name:"",
       status: "active"
-    
     };
     
   }
   
   componentDidMount() {
-    
     var {taskEditing} = this.props;
     if (taskEditing) {
       this.setState({ 
@@ -28,42 +24,17 @@ class Form extends Component {
       });
     }
   }
-
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps) {
-      return;
-    }
-    var taskEdit = nextProps.taskEditing;
-    if (taskEdit) {
-      // console.log("edit", taskEdit);
-      this.setState({ 
-        id: taskEdit.id,
-        name: taskEdit.name,
-        status: taskEdit.status
-      });
-    }  else {
+  componentDidUpdate(prevProps) {
+    // Typical usage (don't forget to compare props):
+    if (this.props.taskEditing.id !== prevProps.taskEditing.id) {
       this.setState({
-        id: '', 
-        name: '',
-        status: 'active'
+        id: this.props.taskEditing.id,
+        name: this.props.taskEditing.name,
+        status: this.props.taskEditing.status,
       });
     }
   }
-
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   console.log(this.props.taskEditing);
-  //   if(prevProps.taskEditing !==this.props.taskEditing && this.props.taskEditing){
-  //      this.setState ({
-  //       id: this.props.taskEditing.id,
-  //       name: this.props.taskEditing.name,
-  //       status: this.props.taskEditing.status
-  //     });
-  //   } else {
-     
-  //   }
-
-  //  }
+    
   onChange = (e) => {
     var target = e.target;
     var name = target.name;
@@ -72,7 +43,7 @@ class Form extends Component {
     this.setState({
       [name]: value
     });
-
+    console.log("onchange");
   }
   onSubmit = (e) => {
     e.preventDefault();
@@ -80,8 +51,10 @@ class Form extends Component {
       return;
     }
     this.props.onSaveTask(this.state);
-    this.resetForm();
     this.props.onSetNullEditingTask();
+    this.resetForm();
+    this.setState({id: ''});
+  
   }
   resetForm = () => {
     this.setState({
@@ -101,7 +74,7 @@ class Form extends Component {
     
     return (
       
-    <div className="card">
+    <div className="card" style={{ marginBottom: "20px"}}>
       <div className="card-header bg-info">{ this.state.id ? "Update task": "Create new task"}
       <button type="button" className="close" aria-label="Close"
         onClick={ this.onCloseForm }

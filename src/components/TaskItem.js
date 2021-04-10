@@ -26,7 +26,9 @@ class TaskItem extends Component {
 
   onDeleteTask = () => {
     this.props.onDeleteTask(this.props.task.id);
+    this.props.onSetNullTaskEditing();
     this.props.onCloseForm();
+
   }
   
   onUpdateTask = () => {
@@ -40,12 +42,12 @@ class TaskItem extends Component {
     return (
 
       <tr className="d-flex">
-          <td className="col-1" >{index + 1}</td>
-          <td className="col-7">{ task.name }</td>
-          <td className="col-2">
+          <td className="col-sm-2 col-md-1" >{index + 1}</td>
+          <td className="col-sm-6 col-md-7">{ task.name }</td>
+          <td className="col-sm-2 col-md-2">
             {this.statusHandle(task.status)}
           </td>
-          <td className="col-2" style = {{padding:"5px"}}>
+          <td className="col-sm-2 col-md-2" style = {{padding:"5px"}}>
             <button className="btn-ed btn btn-warning "
               style={{marginRight:"5px"}}
               onClick={ this.onUpdateTask }
@@ -85,6 +87,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     onUpdateTask: (task) => {
       return dispatch(actions.updateTask(task));
+    },
+    onSetNullTaskEditing: () => {
+      return dispatch(actions.setNullTaskEditing());
     }
   }
 }

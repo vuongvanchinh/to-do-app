@@ -12,7 +12,7 @@ import * as actions from './actions/index';
 class App extends Component {
  
   onToggleForm = () => {
-    if (this.props.taskEditing) {
+    if (this.props.taskEditing.id) {
       this.props.onSetNullEditingTask();
       this.props.onOpenForm();
     } else {
